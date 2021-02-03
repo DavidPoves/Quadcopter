@@ -12,7 +12,7 @@ Servo Motor1, Motor2, Motor3, Motor4;
 const int MIN_PULSE_LENGTH =  1000;  // Minimum pulse length in µs
 const int MAX_PULSE_LENGTH = 2000;  // Maximum pulse length in µs
 const int IDLE_PULSE_LENGTH = 1250;  // Idle pulse length in µs
-#define MOTOR_CALIBRATION false  // Set if motors calibration is required.
+#define MOTOR_CALIBRATION true  // Set if motors calibration is required.
 
 // Let compiler know that pins' variables are coming from external file.
 extern int pin_Motor1; extern int pin_Motor2; extern int pin_Motor3;
@@ -25,7 +25,7 @@ extern int pin_Motor4;
  */
 unsigned int security_delay = 5000;  // [miliseconds].
 
-// Define the delay between the beginning of rotation between motors.
+// Define the delay at motor start (setIdle).
 unsigned int start_rotation_delay = 1500;  // [miliseconds].
 
 // Define calibration variables.
@@ -172,7 +172,7 @@ void MotorCalibration(int min_pulse, int max_pulse){
                  Serial.println(" 1");
                  delay(1000);
                  Serial.println("Starting test!");
-                 for (int i = MIN_PULSE_LENGTH; i<=MAX_PULSE_LENGTH; i+=5){
+                 for (int i = MIN_PULSE_LENGTH; i<=1100; i+=5){
                   Serial.print("Pulse Width: ");
                   Serial.println(i);
                   runMotors(i);
@@ -357,4 +357,118 @@ void decreaseRoll(int output_roll, float roll_angle){
   Serial.print("\t");
   Serial.println(motor_velocities[3]);
   
+}
+
+void turnLeft(int output_yaw){
+  int motor1_speed = motor_velocities[0] + abs(output_yaw);
+  motor1_speed = check_speed(motor1_speed);
+  int motor2_speed = motor_velocities[1] - abs(output_yaw);
+  motor2_speed = check_speed(motor2_speed);
+  int motor3_speed = motor_velocities[2] + abs(output_yaw);
+  motor3_speed = check_speed(motor3_speed);
+  int motor4_speed = motor_velocities[3] - abs(output_yaw);
+  motor4_speed = check_speed(motor4_speed);
+  Motor1.writeMicroseconds(motor1_speed);
+  Motor2.writeMicroseconds(motor2_speed);
+  Motor3.writeMicroseconds(motor3_speed);
+  Motor4.writeMicroseconds(motor4_speed);
+  
+  // Store these values in the corresponding array.
+  motor_velocities[0] = motor1_speed;
+  motor_velocities[1] = motor2_speed;
+  motor_velocities[2] = motor3_speed;
+  motor_velocities[3] = motor4_speed;
+
+  Serial.print(motor_velocities[0]);
+  Serial.print("\t");
+  Serial.print(motor_velocities[1]);
+  Serial.print("\t");
+  Serial.print(motor_velocities[2]);
+  Serial.print("\t");
+  Serial.println(motor_velocities[3]);
+}
+
+void turnRight(int output_yaw){
+  int motor1_speed = motor_velocities[0] - abs(output_yaw);
+  motor1_speed = check_speed(motor1_speed);
+  int motor2_speed = motor_velocities[1] + abs(output_yaw);
+  motor2_speed = check_speed(motor2_speed);
+  int motor3_speed = motor_velocities[2] - abs(output_yaw);
+  motor3_speed = check_speed(motor3_speed);
+  int motor4_speed = motor_velocities[3] + abs(output_yaw);
+  motor4_speed = check_speed(motor4_speed);
+  Motor1.writeMicroseconds(motor1_speed);
+  Motor2.writeMicroseconds(motor2_speed);
+  Motor3.writeMicroseconds(motor3_speed);
+  Motor4.writeMicroseconds(motor4_speed);
+  
+  // Store these values in the corresponding array.
+  motor_velocities[0] = motor1_speed;
+  motor_velocities[1] = motor2_speed;
+  motor_velocities[2] = motor3_speed;
+  motor_velocities[3] = motor4_speed;
+
+  Serial.print(motor_velocities[0]);
+  Serial.print("\t");
+  Serial.print(motor_velocities[1]);
+  Serial.print("\t");
+  Serial.print(motor_velocities[2]);
+  Serial.print("\t");
+  Serial.println(motor_velocities[3]);
+}
+
+void increaseThrust(int output_height){
+  int motor1_speed = motor_velocities[0] + abs(output_height);
+  motor1_speed = check_speed(motor1_speed);
+  int motor2_speed = motor_velocities[1] + abs(output_height);
+  motor2_speed = check_speed(motor2_speed);
+  int motor3_speed = motor_velocities[2] + abs(output_height);
+  motor3_speed = check_speed(motor3_speed);
+  int motor4_speed = motor_velocities[3] + abs(output_height);
+  motor4_speed = check_speed(motor4_speed);
+  Motor1.writeMicroseconds(motor1_speed);
+  Motor2.writeMicroseconds(motor2_speed);
+  Motor3.writeMicroseconds(motor3_speed);
+  Motor4.writeMicroseconds(motor4_speed);
+  
+  // Store these values in the corresponding array.
+  motor_velocities[0] = motor1_speed;
+  motor_velocities[1] = motor2_speed;
+  motor_velocities[2] = motor3_speed;
+  motor_velocities[3] = motor4_speed;
+  Serial.print(motor_velocities[0]);
+  Serial.print("\t");
+  Serial.print(motor_velocities[1]);
+  Serial.print("\t");
+  Serial.print(motor_velocities[2]);
+  Serial.print("\t");
+  Serial.println(motor_velocities[3]);
+}
+
+void decreaseThrust(int output_height){
+  int motor1_speed = motor_velocities[0] - abs(output_height);
+  motor1_speed = check_speed(motor1_speed);
+  int motor2_speed = motor_velocities[1] - abs(output_height);
+  motor2_speed = check_speed(motor2_speed);
+  int motor3_speed = motor_velocities[2] - abs(output_height);
+  motor3_speed = check_speed(motor3_speed);
+  int motor4_speed = motor_velocities[3] - abs(output_height);
+  motor4_speed = check_speed(motor4_speed);
+  Motor1.writeMicroseconds(motor1_speed);
+  Motor2.writeMicroseconds(motor2_speed);
+  Motor3.writeMicroseconds(motor3_speed);
+  Motor4.writeMicroseconds(motor4_speed);
+  
+  // Store these values in the corresponding array.
+  motor_velocities[0] = motor1_speed;
+  motor_velocities[1] = motor2_speed;
+  motor_velocities[2] = motor3_speed;
+  motor_velocities[3] = motor4_speed;
+  Serial.print(motor_velocities[0]);
+  Serial.print("\t");
+  Serial.print(motor_velocities[1]);
+  Serial.print("\t");
+  Serial.print(motor_velocities[2]);
+  Serial.print("\t");
+  Serial.println(motor_velocities[3]);
 }
